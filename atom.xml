@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>一个肥宅的小站</title>
+  
+  <subtitle>快乐的webdog</subtitle>
+  <link href="https://blog.njcit.me/atom.xml" rel="self"/>
+  
+  <link href="https://blog.njcit.me/"/>
+  <updated>2020-08-25T01:36:54.796Z</updated>
+  <id>https://blog.njcit.me/</id>
+  
+  <author>
+    <name>A403</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>【老文章】安装burp证书到安卓系统根证书</title>
+    <link href="https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E5%AE%89%E8%A3%85burp%E8%AF%81%E4%B9%A6%E5%88%B0%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E8%B7%9F%E8%AF%81%E4%B9%A6/"/>
+    <id>https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E5%AE%89%E8%A3%85burp%E8%AF%81%E4%B9%A6%E5%88%B0%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E8%B7%9F%E8%AF%81%E4%B9%A6/</id>
+    <published>2020-08-21T09:00:35.000Z</published>
+    <updated>2020-08-25T01:36:54.796Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="0x00-起因"><a href="#0x00-起因" class="headerlink" title="0x00 起因"></a>0x00 起因</h2><p>高版本安卓的APP默认不信任用户安装的证书，所以我们需要把证书安装到系统里面。<br>环境：<br>macOS 10.15.5 (19F96)<br>魅蓝3s 安卓5.1 已ROOT<br>Burp pro V 2020.02  </p><h2 id="0x01-过程"><a href="#0x01-过程" class="headerlink" title="0x01 过程"></a>0x01 过程</h2><h3 id="MAC-端处理"><a href="#MAC-端处理" class="headerlink" title="MAC 端处理"></a>MAC 端处理</h3><p>首先导出Burp的证书：<br><img src="https://i.loli.net/2020/06/02/P2wH1pidgaC9BFm.png" alt="image"><br><img src="https://i.loli.net/2020/06/02/6ATvdGfpJNZxFLY.png" alt="image"><br>打开终端，将der证书转为pem证书：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -inform der -in burp.der -out burp.pem  </span><br></pre></td></tr></table></figure><p>生成pem证书的hash：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -inform PEM -subject_hash_old -in  burp.pem</span><br></pre></td></tr></table></figure><p>重命名/复制证书:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cp burp.pem 9a5ba575.0</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line">  </span><br><span class="line">如果你上面的过程没有错的话，生成的证书hash以及文件内容应该是和我一样的。</span><br><span class="line">![image](https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;06&#x2F;02&#x2F;p2xBLX1SMuKeWGQ.png)</span><br><span class="line"></span><br><span class="line">### 手机端处理</span><br><span class="line">手机连接电脑并开启adb调试：</span><br><span class="line">![image](https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;06&#x2F;02&#x2F;wr9PXebnoMAT1Gm.png)  </span><br><span class="line">推送证书到手机并复制到相应的目录  </span><br></pre></td></tr></table></figure><p>adb push 9a5ba575.0 /data/local/tmp<br>adb shell<br>su<br>mount -o remount,rw /system<br>cd /data/local/tmp<br>cp 9a5ba575.0 /system/etc/security/cacerts/<br>cd /system/etc/security/cacerts<br>chmod 644 9a5ba575.0<br>reboot</p><p>```</p><h2 id="0x02-参考文章"><a href="#0x02-参考文章" class="headerlink" title="0x02 参考文章"></a>0x02 参考文章</h2><p><a href="https://juejin.im/post/5d42f440e51d4561e53538b6">https://juejin.im/post/5d42f440e51d4561e53538b6</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;0x00-起因&quot;&gt;&lt;a href=&quot;#0x00-起因&quot; class=&quot;headerlink&quot; title=&quot;0x00 起因&quot;&gt;&lt;/a&gt;0x00 起因&lt;/h2&gt;&lt;p&gt;高版本安卓的APP默认不信任用户安装的证书，所以我们需要把证书安装到系统里面。&lt;br&gt;环境：&lt;br&gt;</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【老文章】部分安全面试题答案搜集</title>
+    <link href="https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E9%83%A8%E5%88%86%E5%AE%89%E5%85%A8%E9%9D%A2%E8%AF%95%E9%A2%98%E7%AD%94%E6%A1%88%E6%90%9C%E9%9B%86/"/>
+    <id>https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E9%83%A8%E5%88%86%E5%AE%89%E5%85%A8%E9%9D%A2%E8%AF%95%E9%A2%98%E7%AD%94%E6%A1%88%E6%90%9C%E9%9B%86/</id>
+    <published>2020-08-21T08:30:56.000Z</published>
+    <updated>2020-08-21T08:33:45.333Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>又到了毕业季，，希望对大家有帮助^_^，参考项目地址：<br><a href="https://github.com/d1nfinite/sec-interview">https://github.com/d1nfinite/sec-interview</a><br><a href="https://github.com/SecYouth/sec-jobs">https://github.com/SecYouth/sec-jobs</a></p><h2 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h2><p>答案基本网上都有，我只是做一个简单的整理</p><p>如何绕过CDN找到真实IP，请列举五种方法？<br>参考知乎文章：<a href="https://zhuanlan.zhihu.com/p/33440472">https://zhuanlan.zhihu.com/p/33440472</a><br>redis未授权访问如何利用，利用的前提条件是？<br>参考个人博客：<a href="https://p0sec.net/index.php/archives/69/">https://p0sec.net/index.php/archives/69/</a><br>mysql提权方式有哪些?利用条件是什么?<br>参考文章：<a href="https://uuzdaisuki.com/2018/07/02/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83%E6%80%BB%E7%BB%93/">https://uuzdaisuki.com/2018/07/02/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83%E6%80%BB%E7%BB%93/</a><br>常用的信息收集手段有哪些，除去路径扫描，子域名爆破等常见手段，有什么猥琐的方法收集企业信息?<br>有一句话说的好，渗透测试的本质上就是信息收集的过程，你需要去收集尽可能多信息，不要放过任何任何角落的任何有用的信息。<br>例如：Google hacker，whois，c段，网站的JavaScript（你永远无法想想程序员在JavaScript中给你留下了什么惊喜），天眼查（查领导的名字，爆破弱口令，百试不爽）<br>参考文章：<a href="http://blog.nsfocus.net/penetration-test-1/">http://blog.nsfocus.net/penetration-test-1/</a><br>SRC挖掘与渗透测试的区别是什么，针对这两个不同的目标，实施过程中会有什么区别？<br>个人观点：src挖掘是尽可能快的挖到尽可能多漏洞，可能会忽略很多细节；渗透测试是在授权的时间内，尽可能多的发现漏洞，拿到更高的权限，不放过任何一个可能存在漏洞的地方。<br>存储xss在纯内网的环境中，可以怎么利用？<br>xss本质上是任意代码执行，不要仅限于弹cookie,知名地XSS框架beef可以参考一下，xss可以修改网站页面，甚至可以扫描端口，如果你也在内网，可以嗅探密码等等。<br>介绍一下自认为有趣的挖洞经历（或CTF经历）？<br>某某管理系统：<br>登陆使用的是微信的接口，一堆扫描目录无果后，查看网页源代码，发现隐藏的测试登陆接口，使用天眼查搜到某某管理人员的姓名，通过谷歌搜索找到这个管理人员的手机号，使用这个手机号和弱口令111111成功登陆管理后台，后台就是哪些常见的漏洞，XSS（对，就是我，我又在挖后台XSS了），越权，任意密码修改啥的。<br>CSRF的成因及防御措施（不用token如何解决)<br>成因：一个表单可以被多次重放，没有做表单的来源校验，无法确认这个表单是用户主动发送的。<br>如果要防御CSRF，尽量别用get请求，换成post请求，不能用token的话，可以校验Referer头，在核心功能上加上验证码。</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;又到了毕业季，，希望对大家有帮助^_^，参考项目地址：&lt;br&gt;&lt;a href=&quot;https://github.com/d1nfinite/s</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>新的开始</title>
+    <link href="https://blog.njcit.me/2020/08/21/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/"/>
+    <id>https://blog.njcit.me/2020/08/21/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/</id>
+    <published>2020-08-21T08:02:40.000Z</published>
+    <updated>2020-08-21T08:27:38.010Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="阿西吧"><a href="#阿西吧" class="headerlink" title="阿西吧"></a>阿西吧</h2><p>买二手苹果电脑被坑了，居然有公司的远程锁，时间机器备份的硬盘恢复数据的时候也挂了，我的数据啊，安息吧。下面还是说说几点要注意的点吧。  </p><ol><li>参考<a href="https://support.apple.com/zh-cn/HT201314">https://support.apple.com/zh-cn/HT201314</a> ，让mac进入恢复模式，然后抹掉整个硬盘，然后重装。注意：不是直接重装，是先完全抹掉再重装，看看重装之后电脑有没有锁，功能是否正常。</li><li>参考<a href="https://support.apple.com/zh-cn/HT202731">https://support.apple.com/zh-cn/HT202731</a> ，让mac进行自检，自检结果将显示mac是否异常，以及配件是否原装。</li><li>使用某些在线检查序列号的网站，花两元钱查查这个机器是否有锁之类的。<h2 id="软件配置"><a href="#软件配置" class="headerlink" title="软件配置"></a>软件配置</h2>具体可以参考国光大佬的文章，链接：<a href="https://www.sqlsec.com/ggs/Others/">https://www.sqlsec.com/ggs/Others/</a> 。</li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;阿西吧&quot;&gt;&lt;a href=&quot;#阿西吧&quot; class=&quot;headerlink&quot; title=&quot;阿西吧&quot;&gt;&lt;/a&gt;阿西吧&lt;/h2&gt;&lt;p&gt;买二手苹果电脑被坑了，居然有公司的远程锁，时间机器备份的硬盘恢复数据的时候也挂了，我的数据啊，安息吧。下面还是说说几点要注意的点吧。</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+</feed>

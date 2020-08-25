@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.njcit.me","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="0x00 起因高版本安卓的APP默认不信任用户安装的证书，所以我们需要把证书安装到系统里面。环境：macOS 10.15.5 (19F96)魅蓝3s 安卓5.1 已ROOTBurp pro V 2020.02   0x01 过程MAC 端处理首先导出Burp的证书：打开终端，将der证书转为pem证书： 1openssl x509 -inform der -in burp.der -out bur">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【老文章】安装burp证书到安卓系统根证书">
+<meta property="og:url" content="https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E5%AE%89%E8%A3%85burp%E8%AF%81%E4%B9%A6%E5%88%B0%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E8%B7%9F%E8%AF%81%E4%B9%A6/index.html">
+<meta property="og:site_name" content="一个肥宅的小站">
+<meta property="og:description" content="0x00 起因高版本安卓的APP默认不信任用户安装的证书，所以我们需要把证书安装到系统里面。环境：macOS 10.15.5 (19F96)魅蓝3s 安卓5.1 已ROOTBurp pro V 2020.02   0x01 过程MAC 端处理首先导出Burp的证书：打开终端，将der证书转为pem证书： 1openssl x509 -inform der -in burp.der -out bur">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.loli.net/2020/06/02/P2wH1pidgaC9BFm.png">
+<meta property="og:image" content="https://i.loli.net/2020/06/02/6ATvdGfpJNZxFLY.png">
+<meta property="article:published_time" content="2020-08-21T09:00:35.000Z">
+<meta property="article:modified_time" content="2020-08-25T01:36:54.796Z">
+<meta property="article:author" content="A403">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/06/02/P2wH1pidgaC9BFm.png">
+
+<link rel="canonical" href="https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E5%AE%89%E8%A3%85burp%E8%AF%81%E4%B9%A6%E5%88%B0%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E8%B7%9F%E8%AF%81%E4%B9%A6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-hans'
+  };
+</script>
+
+  <title>【老文章】安装burp证书到安卓系统根证书 | 一个肥宅的小站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="一个肥宅的小站" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">一个肥宅的小站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">快乐的webdog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E5%AE%89%E8%A3%85burp%E8%AF%81%E4%B9%A6%E5%88%B0%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E8%B7%9F%E8%AF%81%E4%B9%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="A403">
+      <meta itemprop="description" content="信息安全,渗透测试">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一个肥宅的小站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【老文章】安装burp证书到安卓系统根证书
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-08-21 17:00:35" itemprop="dateCreated datePublished" datetime="2020-08-21T17:00:35+08:00">2020-08-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-08-25 09:36:54" itemprop="dateModified" datetime="2020-08-25T09:36:54+08:00">2020-08-25</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="0x00-起因"><a href="#0x00-起因" class="headerlink" title="0x00 起因"></a>0x00 起因</h2><p>高版本安卓的APP默认不信任用户安装的证书，所以我们需要把证书安装到系统里面。<br>环境：<br>macOS 10.15.5 (19F96)<br>魅蓝3s 安卓5.1 已ROOT<br>Burp pro V 2020.02  </p>
+<h2 id="0x01-过程"><a href="#0x01-过程" class="headerlink" title="0x01 过程"></a>0x01 过程</h2><h3 id="MAC-端处理"><a href="#MAC-端处理" class="headerlink" title="MAC 端处理"></a>MAC 端处理</h3><p>首先导出Burp的证书：<br><img src="https://i.loli.net/2020/06/02/P2wH1pidgaC9BFm.png" alt="image"><br><img src="https://i.loli.net/2020/06/02/6ATvdGfpJNZxFLY.png" alt="image"><br>打开终端，将der证书转为pem证书：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -inform der -in burp.der -out burp.pem  </span><br></pre></td></tr></table></figure>
+
+
+<p>生成pem证书的hash：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -inform PEM -subject_hash_old -in  burp.pem</span><br></pre></td></tr></table></figure>
+<p>重命名/复制证书:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cp burp.pem 9a5ba575.0</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line">  </span><br><span class="line">如果你上面的过程没有错的话，生成的证书hash以及文件内容应该是和我一样的。</span><br><span class="line">![image](https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;06&#x2F;02&#x2F;p2xBLX1SMuKeWGQ.png)</span><br><span class="line"></span><br><span class="line">### 手机端处理</span><br><span class="line">手机连接电脑并开启adb调试：</span><br><span class="line">![image](https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;06&#x2F;02&#x2F;wr9PXebnoMAT1Gm.png)  </span><br><span class="line">推送证书到手机并复制到相应的目录  </span><br></pre></td></tr></table></figure>
+<p>adb push 9a5ba575.0 /data/local/tmp<br>adb shell<br>su<br>mount -o remount,rw /system<br>cd /data/local/tmp<br>cp 9a5ba575.0 /system/etc/security/cacerts/<br>cd /system/etc/security/cacerts<br>chmod 644 9a5ba575.0<br>reboot</p>
+<p>```</p>
+<h2 id="0x02-参考文章"><a href="#0x02-参考文章" class="headerlink" title="0x02 参考文章"></a>0x02 参考文章</h2><p><a target="_blank" rel="noopener" href="https://juejin.im/post/5d42f440e51d4561e53538b6">https://juejin.im/post/5d42f440e51d4561e53538b6</a></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E9%83%A8%E5%88%86%E5%AE%89%E5%85%A8%E9%9D%A2%E8%AF%95%E9%A2%98%E7%AD%94%E6%A1%88%E6%90%9C%E9%9B%86/" rel="prev" title="【老文章】部分安全面试题答案搜集">
+      <i class="fa fa-chevron-left"></i> 【老文章】部分安全面试题答案搜集
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x00-%E8%B5%B7%E5%9B%A0"><span class="nav-number">1.</span> <span class="nav-text">0x00 起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-%E8%BF%87%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">0x01 过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MAC-%E7%AB%AF%E5%A4%84%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">MAC 端处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">3.</span> <span class="nav-text">0x02 参考文章</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">A403</p>
+  <div class="site-description" itemprop="description">信息安全,渗透测试</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">A403</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

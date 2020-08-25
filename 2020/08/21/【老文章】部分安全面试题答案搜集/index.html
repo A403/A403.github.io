@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.0.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"blog.njcit.me","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="前言又到了毕业季，，希望对大家有帮助^_^，参考项目地址：https:&#x2F;&#x2F;github.com&#x2F;d1nfinite&#x2F;sec-interviewhttps:&#x2F;&#x2F;github.com&#x2F;SecYouth&#x2F;sec-jobs 解答答案基本网上都有，我只是做一个简单的整理 如何绕过CDN找到真实IP，请列举五种方法？参考知乎文章：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;33440472red">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【老文章】部分安全面试题答案搜集">
+<meta property="og:url" content="https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E9%83%A8%E5%88%86%E5%AE%89%E5%85%A8%E9%9D%A2%E8%AF%95%E9%A2%98%E7%AD%94%E6%A1%88%E6%90%9C%E9%9B%86/index.html">
+<meta property="og:site_name" content="一个肥宅的小站">
+<meta property="og:description" content="前言又到了毕业季，，希望对大家有帮助^_^，参考项目地址：https:&#x2F;&#x2F;github.com&#x2F;d1nfinite&#x2F;sec-interviewhttps:&#x2F;&#x2F;github.com&#x2F;SecYouth&#x2F;sec-jobs 解答答案基本网上都有，我只是做一个简单的整理 如何绕过CDN找到真实IP，请列举五种方法？参考知乎文章：https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;33440472red">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-08-21T08:30:56.000Z">
+<meta property="article:modified_time" content="2020-08-21T08:33:45.333Z">
+<meta property="article:author" content="A403">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E9%83%A8%E5%88%86%E5%AE%89%E5%85%A8%E9%9D%A2%E8%AF%95%E9%A2%98%E7%AD%94%E6%A1%88%E6%90%9C%E9%9B%86/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-hans'
+  };
+</script>
+
+  <title>【老文章】部分安全面试题答案搜集 | 一个肥宅的小站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="一个肥宅的小站" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">一个肥宅的小站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">快乐的webdog</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-hans">
+    <link itemprop="mainEntityOfPage" href="https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E9%83%A8%E5%88%86%E5%AE%89%E5%85%A8%E9%9D%A2%E8%AF%95%E9%A2%98%E7%AD%94%E6%A1%88%E6%90%9C%E9%9B%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="A403">
+      <meta itemprop="description" content="信息安全,渗透测试">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="一个肥宅的小站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【老文章】部分安全面试题答案搜集
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2020-08-21 16:30:56 / Modified: 16:33:45" itemprop="dateCreated datePublished" datetime="2020-08-21T16:30:56+08:00">2020-08-21</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>又到了毕业季，，希望对大家有帮助^_^，参考项目地址：<br><a target="_blank" rel="noopener" href="https://github.com/d1nfinite/sec-interview">https://github.com/d1nfinite/sec-interview</a><br><a target="_blank" rel="noopener" href="https://github.com/SecYouth/sec-jobs">https://github.com/SecYouth/sec-jobs</a></p>
+<h2 id="解答"><a href="#解答" class="headerlink" title="解答"></a>解答</h2><p>答案基本网上都有，我只是做一个简单的整理</p>
+<p>如何绕过CDN找到真实IP，请列举五种方法？<br>参考知乎文章：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/33440472">https://zhuanlan.zhihu.com/p/33440472</a><br>redis未授权访问如何利用，利用的前提条件是？<br>参考个人博客：<a target="_blank" rel="noopener" href="https://p0sec.net/index.php/archives/69/">https://p0sec.net/index.php/archives/69/</a><br>mysql提权方式有哪些?利用条件是什么?<br>参考文章：<a target="_blank" rel="noopener" href="https://uuzdaisuki.com/2018/07/02/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83%E6%80%BB%E7%BB%93/">https://uuzdaisuki.com/2018/07/02/mysql%E6%95%B0%E6%8D%AE%E5%BA%93%E6%8F%90%E6%9D%83%E6%80%BB%E7%BB%93/</a><br>常用的信息收集手段有哪些，除去路径扫描，子域名爆破等常见手段，有什么猥琐的方法收集企业信息?<br>有一句话说的好，渗透测试的本质上就是信息收集的过程，你需要去收集尽可能多信息，不要放过任何任何角落的任何有用的信息。<br>例如：Google hacker，whois，c段，网站的JavaScript（你永远无法想想程序员在JavaScript中给你留下了什么惊喜），天眼查（查领导的名字，爆破弱口令，百试不爽）<br>参考文章：<a target="_blank" rel="noopener" href="http://blog.nsfocus.net/penetration-test-1/">http://blog.nsfocus.net/penetration-test-1/</a><br>SRC挖掘与渗透测试的区别是什么，针对这两个不同的目标，实施过程中会有什么区别？<br>个人观点：src挖掘是尽可能快的挖到尽可能多漏洞，可能会忽略很多细节；渗透测试是在授权的时间内，尽可能多的发现漏洞，拿到更高的权限，不放过任何一个可能存在漏洞的地方。<br>存储xss在纯内网的环境中，可以怎么利用？<br>xss本质上是任意代码执行，不要仅限于弹cookie,知名地XSS框架beef可以参考一下，xss可以修改网站页面，甚至可以扫描端口，如果你也在内网，可以嗅探密码等等。<br>介绍一下自认为有趣的挖洞经历（或CTF经历）？<br>某某管理系统：<br>登陆使用的是微信的接口，一堆扫描目录无果后，查看网页源代码，发现隐藏的测试登陆接口，使用天眼查搜到某某管理人员的姓名，通过谷歌搜索找到这个管理人员的手机号，使用这个手机号和弱口令111111成功登陆管理后台，后台就是哪些常见的漏洞，XSS（对，就是我，我又在挖后台XSS了），越权，任意密码修改啥的。<br>CSRF的成因及防御措施（不用token如何解决)<br>成因：一个表单可以被多次重放，没有做表单的来源校验，无法确认这个表单是用户主动发送的。<br>如果要防御CSRF，尽量别用get请求，换成post请求，不能用token的话，可以校验Referer头，在核心功能上加上验证码。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/08/21/%E6%96%B0%E7%9A%84%E5%BC%80%E5%A7%8B/" rel="prev" title="新的开始">
+      <i class="fa fa-chevron-left"></i> 新的开始
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E5%AE%89%E8%A3%85burp%E8%AF%81%E4%B9%A6%E5%88%B0%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E8%B7%9F%E8%AF%81%E4%B9%A6/" rel="next" title="【老文章】安装burp证书到安卓系统根证书">
+      【老文章】安装burp证书到安卓系统根证书 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%A3%E7%AD%94"><span class="nav-number">2.</span> <span class="nav-text">解答</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">A403</p>
+  <div class="site-description" itemprop="description">信息安全,渗透测试</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">A403</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://muse.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
