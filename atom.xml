@@ -6,7 +6,7 @@
   <link href="https://blog.njcit.me/atom.xml" rel="self"/>
   
   <link href="https://blog.njcit.me/"/>
-  <updated>2020-08-25T01:36:54.796Z</updated>
+  <updated>2020-08-25T01:55:25.225Z</updated>
   <id>https://blog.njcit.me/</id>
   
   <author>
@@ -17,13 +17,54 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>【老文章】解决高版本安卓无法安装burp到system的问题</title>
+    <link href="https://blog.njcit.me/2020/08/25/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E8%A7%A3%E5%86%B3%E9%AB%98%E7%89%88%E6%9C%AC%E5%AE%89%E5%8D%93%E6%97%A0%E6%B3%95%E5%AE%89%E8%A3%85burp%E5%88%B0system%E7%9A%84%E9%97%AE%E9%A2%98/"/>
+    <id>https://blog.njcit.me/2020/08/25/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E8%A7%A3%E5%86%B3%E9%AB%98%E7%89%88%E6%9C%AC%E5%AE%89%E5%8D%93%E6%97%A0%E6%B3%95%E5%AE%89%E8%A3%85burp%E5%88%B0system%E7%9A%84%E9%97%AE%E9%A2%98/</id>
+    <published>2020-08-25T01:49:11.000Z</published>
+    <updated>2020-08-25T01:55:25.225Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="0x00-前因"><a href="#0x00-前因" class="headerlink" title="0x00 前因"></a>0x00 前因</h2><p>书接上回，高版本的安卓设别在挂在/system读写的时候可能会遇到：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">adb root</span><br><span class="line">adbd cannot run as root in production builds</span><br><span class="line">mount -o remount,rw &#x2F;system</span><br><span class="line">mount: &#39;&#x2F;system&#39; not in &#x2F;proc&#x2F;mounts</span><br></pre></td></tr></table></figure><p>而且就算你挂在了系统读写，下次重启你东西又没了</p><p>0x01 解决<br>现在高版本的安卓root一般使用magisk,因为supersu已经停止维护了。解决的方法就是安装一个magisk的模块就可以解决证书的问题了。<br>项目地址：<a href="https://github.com/NVISO-BE/MagiskTrustUserCerts">https://github.com/NVISO-BE/MagiskTrustUserCerts</a><br>下载最新releases，在magisk中刷入，然后安装user证书，会自动安装到系统里面，水文完。<br><img src="https://i.loli.net/2020/06/04/nmNY6jI38zaV71k.png" alt="image"><br><img src="https://i.loli.net/2020/06/04/8s3JKFe6EdCOZcW.png" alt="image"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;0x00-前因&quot;&gt;&lt;a href=&quot;#0x00-前因&quot; class=&quot;headerlink&quot; title=&quot;0x00 前因&quot;&gt;&lt;/a&gt;0x00 前因&lt;/h2&gt;&lt;p&gt;书接上回，高版本的安卓设别在挂在/system读写的时候可能会遇到：&lt;/p&gt;
+&lt;figure cla</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
+    <title>【老文章】提升渗透测试体验-fuck 火狐浏览器</title>
+    <link href="https://blog.njcit.me/2020/08/25/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E6%8F%90%E5%8D%87%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%BD%93%E9%AA%8C-fuck-%E7%81%AB%E7%8B%90%E6%B5%8F%E8%A7%88%E5%99%A8/"/>
+    <id>https://blog.njcit.me/2020/08/25/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E6%8F%90%E5%8D%87%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%BD%93%E9%AA%8C-fuck-%E7%81%AB%E7%8B%90%E6%B5%8F%E8%A7%88%E5%99%A8/</id>
+    <published>2020-08-25T01:46:41.000Z</published>
+    <updated>2020-08-25T01:47:41.080Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="0x00-起因"><a href="#0x00-起因" class="headerlink" title="0x00 起因"></a>0x00 起因</h2><p>火狐浏览器默认的情况下会火狐的服务器进行通信，而这些流量会导致burp卡死或者xray扫描大量无意义的流量。</p><h2 id="0x01-方案"><a href="#0x01-方案" class="headerlink" title="0x01 方案"></a>0x01 方案</h2><p>使用SwitchyOmega插件，在不使用代理一栏填上：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">*.mozilla.org</span><br><span class="line">*.mozilla.com</span><br><span class="line">*.firefox.com</span><br><span class="line">*.firefox.org</span><br><span class="line">*.mozilla.net</span><br><span class="line">*.cnzz.com</span><br><span class="line">*.baidu.com</span><br><span class="line">*.google.com</span><br><span class="line">*.github.com</span><br></pre></td></tr></table></figure><p><img src="https://i.loli.net/2020/06/18/mw4YyjlB9NhagH1.png" alt="image"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;0x00-起因&quot;&gt;&lt;a href=&quot;#0x00-起因&quot; class=&quot;headerlink&quot; title=&quot;0x00 起因&quot;&gt;&lt;/a&gt;0x00 起因&lt;/h2&gt;&lt;p&gt;火狐浏览器默认的情况下会火狐的服务器进行通信，而这些流量会导致burp卡死或者xray扫描大量无意义</summary>
+      
+    
+    
+    
+    
+  </entry>
+  
+  <entry>
     <title>【老文章】安装burp证书到安卓系统根证书</title>
     <link href="https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E5%AE%89%E8%A3%85burp%E8%AF%81%E4%B9%A6%E5%88%B0%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E8%B7%9F%E8%AF%81%E4%B9%A6/"/>
     <id>https://blog.njcit.me/2020/08/21/%E3%80%90%E8%80%81%E6%96%87%E7%AB%A0%E3%80%91%E5%AE%89%E8%A3%85burp%E8%AF%81%E4%B9%A6%E5%88%B0%E5%AE%89%E5%8D%93%E7%B3%BB%E7%BB%9F%E8%B7%9F%E8%AF%81%E4%B9%A6/</id>
     <published>2020-08-21T09:00:35.000Z</published>
-    <updated>2020-08-25T01:36:54.796Z</updated>
+    <updated>2020-08-25T01:42:46.351Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="0x00-起因"><a href="#0x00-起因" class="headerlink" title="0x00 起因"></a>0x00 起因</h2><p>高版本安卓的APP默认不信任用户安装的证书，所以我们需要把证书安装到系统里面。<br>环境：<br>macOS 10.15.5 (19F96)<br>魅蓝3s 安卓5.1 已ROOT<br>Burp pro V 2020.02  </p><h2 id="0x01-过程"><a href="#0x01-过程" class="headerlink" title="0x01 过程"></a>0x01 过程</h2><h3 id="MAC-端处理"><a href="#MAC-端处理" class="headerlink" title="MAC 端处理"></a>MAC 端处理</h3><p>首先导出Burp的证书：<br><img src="https://i.loli.net/2020/06/02/P2wH1pidgaC9BFm.png" alt="image"><br><img src="https://i.loli.net/2020/06/02/6ATvdGfpJNZxFLY.png" alt="image"><br>打开终端，将der证书转为pem证书：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -inform der -in burp.der -out burp.pem  </span><br></pre></td></tr></table></figure><p>生成pem证书的hash：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -inform PEM -subject_hash_old -in  burp.pem</span><br></pre></td></tr></table></figure><p>重命名/复制证书:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cp burp.pem 9a5ba575.0</span><br><span class="line">&#96;&#96;&#96;  </span><br><span class="line">  </span><br><span class="line">如果你上面的过程没有错的话，生成的证书hash以及文件内容应该是和我一样的。</span><br><span class="line">![image](https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;06&#x2F;02&#x2F;p2xBLX1SMuKeWGQ.png)</span><br><span class="line"></span><br><span class="line">### 手机端处理</span><br><span class="line">手机连接电脑并开启adb调试：</span><br><span class="line">![image](https:&#x2F;&#x2F;i.loli.net&#x2F;2020&#x2F;06&#x2F;02&#x2F;wr9PXebnoMAT1Gm.png)  </span><br><span class="line">推送证书到手机并复制到相应的目录  </span><br></pre></td></tr></table></figure><p>adb push 9a5ba575.0 /data/local/tmp<br>adb shell<br>su<br>mount -o remount,rw /system<br>cd /data/local/tmp<br>cp 9a5ba575.0 /system/etc/security/cacerts/<br>cd /system/etc/security/cacerts<br>chmod 644 9a5ba575.0<br>reboot</p><p>```</p><h2 id="0x02-参考文章"><a href="#0x02-参考文章" class="headerlink" title="0x02 参考文章"></a>0x02 参考文章</h2><p><a href="https://juejin.im/post/5d42f440e51d4561e53538b6">https://juejin.im/post/5d42f440e51d4561e53538b6</a></p>]]></content>
+    <content type="html"><![CDATA[<h2 id="0x00-起因"><a href="#0x00-起因" class="headerlink" title="0x00 起因"></a>0x00 起因</h2><p>高版本安卓的APP默认不信任用户安装的证书，所以我们需要把证书安装到系统里面。<br>环境：<br>macOS 10.15.5 (19F96)<br>魅蓝3s 安卓5.1 已ROOT<br>Burp pro V 2020.02  </p><h2 id="0x01-过程"><a href="#0x01-过程" class="headerlink" title="0x01 过程"></a>0x01 过程</h2><h3 id="MAC-端处理"><a href="#MAC-端处理" class="headerlink" title="MAC 端处理"></a>MAC 端处理</h3><p>首先导出Burp的证书：<br><img src="https://i.loli.net/2020/06/02/P2wH1pidgaC9BFm.png" alt="image"><br><img src="https://i.loli.net/2020/06/02/6ATvdGfpJNZxFLY.png" alt="image"><br>打开终端，将der证书转为pem证书：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -inform der -in burp.der -out burp.pem  </span><br></pre></td></tr></table></figure><p>生成pem证书的hash：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -inform PEM -subject_hash_old -in  burp.pem</span><br></pre></td></tr></table></figure><p>重命名/复制证书:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cp burp.pem 9a5ba575.0</span><br></pre></td></tr></table></figure><p>如果你上面的过程没有错的话，生成的证书hash以及文件内容应该是和我一样的。<br><img src="https://i.loli.net/2020/06/02/p2xBLX1SMuKeWGQ.png" alt="image"></p><h3 id="手机端处理"><a href="#手机端处理" class="headerlink" title="手机端处理"></a>手机端处理</h3><p>手机连接电脑并开启adb调试：<br><img src="https://i.loli.net/2020/06/02/wr9PXebnoMAT1Gm.png" alt="image"><br>推送证书到手机并复制到相应的目录</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">adb push 9a5ba575.0 &#x2F;data&#x2F;local&#x2F;tmp</span><br><span class="line">adb shell</span><br><span class="line">su</span><br><span class="line">mount -o remount,rw &#x2F;system</span><br><span class="line">cd &#x2F;data&#x2F;local&#x2F;tmp</span><br><span class="line">cp 9a5ba575.0 &#x2F;system&#x2F;etc&#x2F;security&#x2F;cacerts&#x2F;</span><br><span class="line">cd &#x2F;system&#x2F;etc&#x2F;security&#x2F;cacerts</span><br><span class="line">chmod 644 9a5ba575.0</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure><h2 id="0x02-参考文章"><a href="#0x02-参考文章" class="headerlink" title="0x02 参考文章"></a>0x02 参考文章</h2><p><a href="https://juejin.im/post/5d42f440e51d4561e53538b6">https://juejin.im/post/5d42f440e51d4561e53538b6</a></p>]]></content>
     
     
       
